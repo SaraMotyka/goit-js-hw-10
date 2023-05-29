@@ -7,6 +7,13 @@ const loaderMessage = document.querySelector('.loader');
 const errorMessage = document.querySelector('.error');
 const catsInfoDiv = document.querySelector('.cat-info');
 
+function showLoader() {
+  setTimeout(function () {
+    loaderMessage.style.display = 'none';
+  }, 5000);
+}
+showLoader();
+
 function pingUrl(url) {
   return new Promise((resolve, reject) => {
     fetch(url)
@@ -19,6 +26,8 @@ function pingUrl(url) {
       })
       .then(data => {
         resolve(data);
+        const element = document.querySelector('.visible');
+        element.style.display = 'none';
       })
       .catch(err => {
         error(err.toString());
@@ -55,32 +64,26 @@ function fetchCatByBreed(breedId) {
   const catsInfo = `https://api.thecatapi.com/v1/breeds/${breedId}`;
   pingUrl(catsInfo)
     .then(data => {
-      const aboutCats = `<div class = "cat-txt"><h1>${data.name}</h1><p>${data.description}</p><h2>Temperament</h2><p>${data.temperament}</p></div>`;
+      const aboutCats = `<div><h1>${data.name}</h1><p>${data.description}</p><h2>Temperament</h2><p>${data.temperament}</p></div>`;
       catsInfoDiv.insertAdjacentHTML('beforeend', aboutCats);
+      const divStyle = document.querySelector('.cat-info');
+      divStyle.style.fontFamily = 'Arial, sans-serif';
+      divStyle.style.fontStyle = 'italic';
+      divStyle.style.width = '600px';
     })
     .catch(err => {
       showError();
     });
 }
-
-function showLoader() {
-  loaderMessage.classList.add('visible');
-  errorMessage.classList.remove('visible');
-}
 function showError() {
   errorMessage.classList.add('visible');
   loaderMessage.classList.remove('visible');
 }
-
 function handlebreedSelect(e) {
   e.preventDefault();
-  showLoader();
   showError();
   catsInfoDiv.innerHTML = '';
   fetchCatByBreed(e.target.value);
-  setTimeout(function () {
-    showLoader(loaderMessage);
-  }, 500);
 }
 
 breedSelect.addEventListener('change', handlebreedSelect);
