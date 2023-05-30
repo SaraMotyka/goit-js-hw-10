@@ -18,3 +18,15 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+.visible {
+  display: none;
+}
+.cat-pic {
+  max-width: 1000px;
+  max-height: 1000px;
+}
+.cat-info {
+  font-family: 'Arial, sans-serif';
+  font-style: italic;
+  width: 600px;
+}

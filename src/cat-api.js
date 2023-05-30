@@ -8,11 +8,9 @@ const errorMessage = document.querySelector('.error');
 const catsInfoDiv = document.querySelector('.cat-info');
 
 function showLoader() {
-  setTimeout(function () {
-    loaderMessage.style.display = 'none';
-  }, 5000);
+  loaderMessage.classList.add('visible');
+  errorMessage.classList.remove('visible');
 }
-showLoader();
 
 function pingUrl(url) {
   return new Promise((resolve, reject) => {
@@ -57,6 +55,7 @@ function fetchCatByBreed(breedId) {
     .then(data => {
       const catsPicture = `<div><img src="${data[0].url}" class= "cat-pic"></div>`;
       catsInfoDiv.insertAdjacentHTML('afterbegin', catsPicture);
+      showLoader();
     })
     .catch(err => {
       showError();
@@ -64,12 +63,9 @@ function fetchCatByBreed(breedId) {
   const catsInfo = `https://api.thecatapi.com/v1/breeds/${breedId}`;
   pingUrl(catsInfo)
     .then(data => {
-      const aboutCats = `<div><h1>${data.name}</h1><p>${data.description}</p><h2>Temperament</h2><p>${data.temperament}</p></div>`;
+      const aboutCats = `<div class= "cat-desc"><h1>${data.name}</h1><p>${data.description}</p><h2>Temperament</h2><p>${data.temperament}</p></div>`;
       catsInfoDiv.insertAdjacentHTML('beforeend', aboutCats);
-      const divStyle = document.querySelector('.cat-info');
-      divStyle.style.fontFamily = 'Arial, sans-serif';
-      divStyle.style.fontStyle = 'italic';
-      divStyle.style.width = '600px';
+      loaderMessage.classList.add('hidden');
     })
     .catch(err => {
       showError();
